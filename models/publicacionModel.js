@@ -18,4 +18,4 @@ const esquemaPublicacion = new mongoose.Schema({
 
 const Publicacion = mongoose.model("Publicacion", esquemaPublicacion);
 
-export default Publicacion;
+export {Publicacion};
