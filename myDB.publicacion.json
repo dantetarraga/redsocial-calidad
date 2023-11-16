@@ -1,0 +1,16 @@
+[{
+    "num_pub": 1,
+    "usuario": "Juan",
+    "fecha": "2023-11-16T00:00:00Z",
+    "descripcion": "Hoy es mi cumpleaños"
+
+},
+
+{
+
+    "num_pub": 2,
+    "usuario": "Mario",
+    "fecha": "2023-12-16T00:00:00Z",
+    "descripcion": "Que aburrido dia tuve"
+
+}]

@@ -24,6 +24,7 @@ const start = async () => {
 };
 
 app.use('/user', userRouter)
+app.use('/publicacion', userRouter)
 app.use('/auth', authRouter)
 app.use('/conversation', conversationRouter)
 
