@@ -1,0 +1,22 @@
+[{
+  "_id": {
+    "$oid": "6544588294a0066234993717"
+  },
+  "nombre": "Juan",
+  "apellidos": "Mamani Quispe",
+  "fecha_registro": "Thu Oct 19 2023 19:00:00 GMT-0500 (hora estándar de Perú)",
+  "fecha_nacimiento": "Sun Oct 19 2003 19:00:00 GMT-0500 (hora estándar de Perú)",
+  "contrasena": "password",
+  "correo": "jjmamani@gmail.com"
+},
+{
+  "_id": {
+    "$oid": "65445f1c94a0066234993722"
+  },
+  "nombre": "Mario",
+  "apellidos": "Vargas Llosa",
+  "fecha_registro": "2023-10-20T00:00:00.000+00:00",
+  "fecha_nacimiento": "2003-10-20T00:00:00.000+00:00",
+  "contrasena": "password",
+  "correo": "vargas@gmail.com"
+}]
