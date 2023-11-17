@@ -1,7 +1,8 @@
 // PublicacionModel.js
-import mongoose from 'mongoose';
+import db from "../conexion/conexion.js";
+import mongoose from "mongoose";
 
-const esquemaPublicacion = new mongoose.Schema({
+const esquemaPublicacion = mongoose.Schema({
   usuario: {
     type: String,
     required: true,
@@ -16,6 +17,6 @@ const esquemaPublicacion = new mongoose.Schema({
   },
 });
 
-const Publicacion = mongoose.model("Publicacion", esquemaPublicacion);
+const Publicacion = db.model("publicacion", esquemaPublicacion);
 
-export {Publicacion};
+export default Publicacion;

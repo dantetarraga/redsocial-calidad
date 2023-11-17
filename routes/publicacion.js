@@ -1,11 +1,13 @@
 import { Router } from "express";
 import publicacionController from "../controllers/publicacion.js";
 
-const userRouter = Router()
+const publicacionRouter = Router();
 
-
-userRouter.post("/create", publicacionController.createUser);
-userRouter.put("/update/:id", publicacionController.updateUser);
-userRouter.delete("/delete/:id", publicacionController.deleteUser);
+publicacionRouter.post("/create", publicacionController.createPublicacion);
+//publicacionRouter.put("/update/:id", publicacionController.updateUser);
+publicacionRouter.delete(
+  "/delete/:id",
+  publicacionController.deletePublicacion,
+);
 
 export default publicacionRouter;
