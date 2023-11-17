@@ -7,9 +7,18 @@ import userRouter from "./routes/users.js";
 import publicacionRouter from "./routes/publicacion.js";
 import conversationRouter from "./routes/conversations.js";
 
+import bodyParser  from 'body-parser';
+import multer from 'multer';
+var upload = multer();
+
 dotenv.config();
 const app = express();
-app.use(json());
+//app.use(json());
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(upload.array()); 
+app.use(express.static('public'));
 
 const start = async () => {
   try {
@@ -28,5 +37,9 @@ app.use("/user", userRouter);
 app.use("/publicacion", publicacionRouter);
 app.use("/auth", authRouter);
 app.use("/conversation", conversationRouter);
+
+app.get('/', function(req, res){
+  res.send("Red social");
+});
 
 start();
