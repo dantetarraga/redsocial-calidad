@@ -12,18 +12,9 @@ class publicacionController {
   }
 
   static async getAllPublicacion(req, res) {
-    const token = req.headers.authorization.split(" ")[1];
-
-    if (!token)
-      return res.status(401).json({ error: "No se ha enviado el token" });
-
     try {
-      jwt.verify(token, process.env.SECRET, async (err, decoded) => {
-        if (err) return res.status(403).json({ error: "Token inválido" });
-      });
-
-      const allPublicaciones = await Publicacion.find();
-      return res.status(200).json(allPublicaciones);
+      const publicaciones = await PublicacionModel.find({});
+      return res.status(200).json(publicaciones);
     } catch (error) {
       return res.status(500).json({ error: "Error al actualizar publicacion" });
     }
@@ -56,6 +47,21 @@ class publicacionController {
       return res.status(200).json(publicacionCreada);
     } catch (error) {
       return res.status(500).json({ error: "Error al crear publicacion" });
+    }
+  }
+
+  static async updatePublicacion(req, res) {
+    try {
+      const { id, descripcion } = req.body;
+      console.log({ id, descripcion });
+
+      const publicacion = await PublicacionModel.findByIdAndUpdate(id, {
+        descripcion,
+      });
+      publicacion.descripcion = descripcion;
+      return res.status(200).json(publicacion);
+    } catch (error) {
+      return res.status(500).json({ error: "Error al actualizar publicacion" });
     }
   }
 
@@ -120,31 +126,6 @@ class publicacionController {
       return res.status(200).json(publicacionEliminada);
     } catch (error) {
       return res.status(500).json({ error: "Error al eliminar publicacion" });
-    }
-  }
-
-  static async updatePublicacion(req, res) {
-    const token = req.headers.authorization.split(" ")[1];
-    const { id } = req.params;
-    const updatedPublicacionData = req.body;
-
-    if (!token)
-      return res.status(401).json({ error: "No se ha enviado el token" });
-
-    try {
-      jwt.verify(token, process.env.SECRET, async (err, decoded) => {
-        if (err) return res.status(403).json({ error: "Token inválido" });
-
-        // Actualiza el usuario en la base de datos
-        await Publicacion.updateOne({ _id: id }, updatedPublicacionData);
-      });
-
-      // Recupera el usuario actualizado
-      const updatedPublicacion = await Publicacion.findById(id);
-
-      return res.status(200).json(updatedPublicacion);
-    } catch (error) {
-      return res.status(500).json({ error: "Error al actualizar publicacion" });
     }
   }
 
