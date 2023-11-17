@@ -79,11 +79,10 @@ class publicacionController {
         fecha,
         reaccion: Reacciones[reaccion],
       });
-      const reaccionS = await reaccionM.save();
 
       const publicacion = await PublicacionModel.findByIdAndUpdate(
         id,
-        { $push: { reacciones: reaccionS } },
+        { $push: { reacciones: reaccionM } },
         { new: true, useFindAndModify: false },
       );
       return res.status(200).json(publicacion);
@@ -101,11 +100,10 @@ class publicacionController {
       console.log({ id, usuario, fecha, comentario });
 
       const comentarioM = new ComentarioModel({ usuario, fecha, comentario });
-      const comentarioS = await comentarioM.save();
 
       const publicacion = await PublicacionModel.findByIdAndUpdate(
         id,
-        { $push: { comentarios: comentarioS } },
+        { $push: { comentarios: comentarioM } },
         { new: true, useFindAndModify: false },
       );
       return res.status(200).json(publicacion);
