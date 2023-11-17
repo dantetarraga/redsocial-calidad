@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import PublicacionModel from "../models/publicacionModel.js";
+import { ComentarioModel } from "../models/comentarioModel.js";
+import { ReaccionModel } from "../models/reaccionModel.js";
 import { Reacciones } from "../utils/global.js";
 //import { Publicacion } from '../models/PublicacionModel.js';
 class publicacionController {
@@ -59,16 +61,23 @@ class publicacionController {
 
   static async reactedPublicacion(req, res) {
     try {
-      const { id, reaccion } = req.body;
-      console.log({ id, reaccion });
+      const { id, usuario, fecha, reaccion } = req.body;
+      console.log({ id, usuario, fecha, reaccion });
 
       if (!Reacciones[reaccion]) {
         throw new Error("La reaccion no esta definida en la red social");
       }
 
+      const reaccionM = new ReaccionModel({
+        usuario,
+        fecha,
+        reaccion: Reacciones[reaccion],
+      });
+      const reaccionS = await reaccionM.save();
+
       const publicacion = await PublicacionModel.findByIdAndUpdate(
         id,
-        { $push: { reacciones: Reacciones[reaccion] } },
+        { $push: { reacciones: reaccionS } },
         { new: true, useFindAndModify: false },
       );
       return res.status(200).json(publicacion);
@@ -82,12 +91,15 @@ class publicacionController {
 
   static async commentPublicacion(req, res) {
     try {
-      const { id, comentario } = req.body;
-      console.log({ id, comentario });
+      const { id, usuario, fecha, comentario } = req.body;
+      console.log({ id, usuario, fecha, comentario });
+
+      const comentarioM = new ComentarioModel({ usuario, fecha, comentario });
+      const comentarioS = await comentarioM.save();
 
       const publicacion = await PublicacionModel.findByIdAndUpdate(
         id,
-        { $push: { comentarios: comentario } },
+        { $push: { comentarios: comentarioS } },
         { new: true, useFindAndModify: false },
       );
       return res.status(200).json(publicacion);

@@ -1,6 +1,8 @@
 // PublicacionModel.js
 import db from "../conexion/conexion.js";
 import mongoose from "mongoose";
+import { esquemaComentario } from "../models/comentarioModel.js";
+import { esquemaReaccion } from "../models/reaccionModel.js";
 
 const esquemaPublicacion = mongoose.Schema({
   usuario: {
@@ -15,8 +17,8 @@ const esquemaPublicacion = mongoose.Schema({
     type: String,
     required: true,
   },
-  reacciones: [String],
-  comentarios: [String],
+  comentarios: [esquemaComentario],
+  reacciones: [esquemaReaccion],
 });
 
 const Publicacion = db.model("publicacion", esquemaPublicacion);
