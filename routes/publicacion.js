@@ -4,10 +4,11 @@ import publicacionController from "../controllers/publicacion.js";
 const publicacionRouter = Router();
 
 publicacionRouter.post("/create", publicacionController.createPublicacion);
-//publicacionRouter.put("/update/:id", publicacionController.updateUser);
 publicacionRouter.delete(
   "/delete/:id",
   publicacionController.deletePublicacion,
 );
+publicacionRouter.post("/reacted", publicacionController.reactedPublicacion);
+publicacionRouter.post("/comment", publicacionController.commentPublicacion);
 
 export default publicacionRouter;

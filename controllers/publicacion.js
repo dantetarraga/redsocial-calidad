@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import PublicacionModel from "../models/publicacionModel.js";
+import { Reacciones } from "../utils/global.js";
 //import { Publicacion } from '../models/PublicacionModel.js';
 class publicacionController {
   static async createUser(req, res) {
@@ -53,6 +54,48 @@ class publicacionController {
       return res.status(200).json(publicacionCreada);
     } catch (error) {
       return res.status(500).json({ error: "Error al crear publicacion" });
+    }
+  }
+
+  static async reactedPublicacion(req, res) {
+    try {
+      const { id, reaccion } = req.body;
+      console.log({ id, reaccion });
+
+      if (!Reacciones[reaccion]) {
+        throw new Error("La reaccion no esta definida en la red social");
+      }
+
+      const publicacion = await PublicacionModel.findByIdAndUpdate(
+        id,
+        { $push: { reacciones: Reacciones[reaccion] } },
+        { new: true, useFindAndModify: false },
+      );
+      return res.status(200).json(publicacion);
+    } catch (error) {
+      return res.status(500).json({
+        error: "Error al reaccionar publicacion",
+        message: error.message,
+      });
+    }
+  }
+
+  static async commentPublicacion(req, res) {
+    try {
+      const { id, comentario } = req.body;
+      console.log({ id, comentario });
+
+      const publicacion = await PublicacionModel.findByIdAndUpdate(
+        id,
+        { $push: { comentarios: comentario } },
+        { new: true, useFindAndModify: false },
+      );
+      return res.status(200).json(publicacion);
+    } catch (error) {
+      return res.status(500).json({
+        error: "Error al comentar publicacion",
+        message: error.message,
+      });
     }
   }
 

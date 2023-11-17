@@ -15,6 +15,8 @@ const esquemaPublicacion = mongoose.Schema({
     type: String,
     required: true,
   },
+  reacciones: [String],
+  comentarios: [String],
 });
 
 const Publicacion = db.model("publicacion", esquemaPublicacion);
