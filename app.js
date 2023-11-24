@@ -6,6 +6,8 @@ import authRouter from "./routes/auth.js";
 import userRouter from "./routes/users.js";
 import publicacionRouter from "./routes/publicacion.js";
 import conversationRouter from "./routes/conversations.js";
+import groupRouter from "./routes/group.js";
+
 
 import bodyParser  from 'body-parser';
 import multer from 'multer';
@@ -37,6 +39,7 @@ app.use("/user", userRouter);
 app.use("/publicacion", publicacionRouter);
 app.use("/auth", authRouter);
 app.use("/conversation", conversationRouter);
+app.use("/group", groupRouter);
 
 app.get('/', function(req, res){
   res.send("Red social");
