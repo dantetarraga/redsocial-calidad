@@ -11,11 +11,11 @@ import groupRouter from "./routes/group.js";
 import messageRouter from "./routes/message.js";
 
 import bodyParser from "body-parser";
-import multer from "multer";
+//import multer from "multer";
 import { Server } from "socket.io";
 import { createServer } from "http";
 
-const upload = multer();
+//const upload = multer();
 
 dotenv.config();
 const app = express();
@@ -30,7 +30,7 @@ socketio.on("connection", () => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(upload.array());
+//app.use(upload.array());
 app.use(express.static("public"));
 
 app.use((req, res, next) => {

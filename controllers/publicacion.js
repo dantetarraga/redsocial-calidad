@@ -40,8 +40,14 @@ class publicacionController {
   static async createPublicacion(req, res) {
     try {
       const { usuario, fecha, descripcion } = req.body;
-      console.log({ usuario, fecha, descripcion });
-      const publicacion = new PublicacionModel({ usuario, fecha, descripcion });
+      const fileUrl = `/${req.file.destination}${req.file.filename}`;
+      console.log({ usuario, fecha, descripcion, fileUrl });
+      const publicacion = new PublicacionModel({
+        usuario,
+        fecha,
+        descripcion,
+        fileUrl,
+      });
 
       const publicacionCreada = await publicacion.save();
       return res.status(200).json(publicacionCreada);

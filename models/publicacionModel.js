@@ -17,6 +17,9 @@ const esquemaPublicacion = mongoose.Schema({
     type: String,
     required: true,
   },
+  fileUrl: {
+    type: String,
+  },
   comentarios: [esquemaComentario],
   reacciones: [esquemaReaccion],
 });
