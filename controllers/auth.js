@@ -1,40 +1,44 @@
-import jwt from "jsonwebtoken";
-
-import { Usuario } from "../models/userModel.js";
+const generarToken = require("../utils/authToken.js");
+const Usuario = require("../models/userModel.js");
 
 class authController {
+  static async iniciarSesion(req, res) {
+    const { correo, contrasena } = req.body;
 
-    static async login(req, res) {
-        const { correo, contrasena } = req.body;
+    try {
+      const usuario = await Usuario.findOne({ correo: correo });
 
-        try {
-            const user = await Usuario.findOne({ correo: correo });
+      if (!usuario) req.status(401).json({ error: "Credenciales invalidas" });
+      if (contrasena !== usuario.contrasena)
+        return res.status(401).json({ error: "Credenciales invalidas" });
 
-            if (!user) {
-                req.status(401).json({ error: "Usuario no encontrado" });
-            }
+      const token = generarToken(usuario._id);
 
-            if (contrasena != user.contrasena) {
-                return res.status(401).json({ error: "Contraseña incorrecta" });
-            }
-
-            const userForToken = {
-                correo: user.correo
-            }
-
-            const token = 'Beader ' + jwt.sign(userForToken, process.env.SECRET, { expiresIn: 60 * 60 * 24 * 30 });
-            res.send({ token, correo: user.correo })
-
-        } catch (error) {
-            return res.status(500).json({ error: "usuario o contraseña incorrectos" });
-        }
-
+      return res.send({ token, correo: usuario.correo });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: "Error al iniciar sesion", message: error.message });
     }
+  }
 
-    static register(req, res) {
+  static async registrarUsuario(req, res) {
+    try {
+      const fotoPerfil = "public/default-img.webp";
+      const nuevoUsuario = new Usuario({
+        ...req.body,
+        foto_perfil: fotoPerfil,
+      });
 
+      await nuevoUsuario.save();
+      return res.status(201).json({ Usuario: nuevoUsuario });
+    } catch (error) {
+      return res.status(500).json({
+        error: "Error al registrar el usuario",
+        message: error.message,
+      });
     }
+  }
 }
 
-
-export default authController;
+module.exports = authController;

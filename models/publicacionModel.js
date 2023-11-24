@@ -1,8 +1,8 @@
 // PublicacionModel.js
-import db from "../conexion/conexion.js";
-import mongoose from "mongoose";
-import { esquemaComentario } from "../models/comentarioModel.js";
-import { esquemaReaccion } from "../models/reaccionModel.js";
+const db = require("../conexion/conexion.js");
+const mongoose = require("mongoose");
+const { esquemaComentario } = require("../models/comentarioModel.js");
+const { esquemaReaccion } = require("../models/reaccionModel.js");
 
 const esquemaPublicacion = mongoose.Schema({
   usuario: {
@@ -23,4 +23,4 @@ const esquemaPublicacion = mongoose.Schema({
 
 const Publicacion = db.model("publicacion", esquemaPublicacion);
 
-export default Publicacion;
+module.exports = Publicacion;

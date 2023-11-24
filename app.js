@@ -1,24 +1,24 @@
-import dotenv from "dotenv";
-import express, { json } from "express";
-import { connect } from "mongoose";
-
-import authRouter from "./routes/auth.js";
-import userRouter from "./routes/users.js";
-import publicacionRouter from "./routes/publicacion.js";
-import conversationRouter from "./routes/conversations.js";
-
-import bodyParser  from 'body-parser';
-import multer from 'multer';
-var upload = multer();
+const dotenv = require("dotenv");
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const multer = require("multer");
+const authRouter = require("./routes/auth.js");
+const conversationRouter = require("./routes/conversations.js");
+const publicacionRouter = require("./routes/publicacion.js");
+const userRouter = require("./routes/users.js");
+const amistadRouter = require("./routes/amistad.js");
+// var upload = multer();
 
 dotenv.config();
 const app = express();
-//app.use(json());
-app.use(bodyParser.json()); 
+app.use(cors());
+
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(upload.array()); 
-app.use(express.static('public'));
+// app.use(upload.array());
+app.use(express.static("public"));
 
 const start = async () => {
   try {
@@ -35,10 +35,11 @@ const start = async () => {
 
 app.use("/user", userRouter);
 app.use("/publicacion", publicacionRouter);
-app.use("/auth", authRouter);
+app.use("/", authRouter);
 app.use("/conversation", conversationRouter);
+app.use("/", amistadRouter);
 
-app.get('/', function(req, res){
+app.get("/", function (req, res) {
   res.send("Red social");
 });
 

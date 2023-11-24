@@ -1,5 +1,5 @@
 // models/bookModel.js
-import mongoose from 'mongoose';
+const mongoose = require("mongoose");
 
 const esquemaUsuario = new mongoose.Schema({
   nombre: {
@@ -12,11 +12,10 @@ const esquemaUsuario = new mongoose.Schema({
   },
   fecha_registro: {
     type: String,
-    required: true,
+    default: () => new Date().toISOString(),
   },
   fecha_nacimiento: {
     type: String,
-    required: true,
   },
   contrasena: {
     type: String,
@@ -26,9 +25,32 @@ const esquemaUsuario = new mongoose.Schema({
     type: String,
     required: true,
   },
+  amigos: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Usuario",
+    },
+  ],
+  solicitudes_amistad: [
+    {
+      usuario: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Usuario",
+        required: true,
+      },
+      estado: {
+        type: String,
+        enum: ["pendiente", "aceptado"],
+        default: "pendiente",
+        required: true,
+      },
+    },
+  ],
+  foto_perfil: {
+    type: String,
+  },
 });
 
 const Usuario = mongoose.model("Usuario", esquemaUsuario);
 
-export { Usuario };
-
+module.exports = Usuario;

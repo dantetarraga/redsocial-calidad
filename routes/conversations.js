@@ -1,10 +1,16 @@
-import { Router } from "express";
-import conversacionesController from "../controllers/conversations.js";
+const express = require("express");
+const conversacionesController = require("../controllers/conversations.js");
 
-const conversationRouter = Router();
+const conversationRouter = express.Router();
 
 conversationRouter.post("/create", conversacionesController.crearConversacion);
-conversationRouter.get("/users/:userId", conversacionesController.obtenerConversacionesUsuario);
-conversationRouter.get("/:conversationId", conversacionesController.obtenerConversacionPorId);
+conversationRouter.get(
+  "/users/:userId",
+  conversacionesController.obtenerConversacionesUsuario
+);
+conversationRouter.get(
+  "/:conversationId",
+  conversacionesController.obtenerConversacionPorId
+);
 
-export default conversationRouter;
+module.exports = conversationRouter;

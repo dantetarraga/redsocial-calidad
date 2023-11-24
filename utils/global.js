@@ -4,4 +4,4 @@ const Reacciones = {
   r_me_enoja: "me_enoja",
 };
 
-export { Reacciones };
+module.exports = { Reacciones };

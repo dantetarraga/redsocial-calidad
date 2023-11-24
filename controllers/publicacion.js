@@ -1,8 +1,9 @@
-import jwt from "jsonwebtoken";
-import PublicacionModel from "../models/publicacionModel.js";
-import { ComentarioModel } from "../models/comentarioModel.js";
-import { ReaccionModel } from "../models/reaccionModel.js";
-import { Reacciones } from "../utils/global.js";
+const jwt = require("jsonwebtoken");
+const PublicacionModel = require("../models/publicacionModel.js");
+const { ComentarioModel } = require("../models/comentarioModel.js");
+const { ReaccionModel } = require("../models/reaccionModel.js");
+const { Reacciones } = require("../utils/global.js");
+
 //import { Publicacion } from '../models/PublicacionModel.js';
 class publicacionController {
   static async createUser(req, res) {
@@ -83,7 +84,7 @@ class publicacionController {
       const publicacion = await PublicacionModel.findByIdAndUpdate(
         id,
         { $push: { reacciones: reaccionM } },
-        { new: true, useFindAndModify: false },
+        { new: true, useFindAndModify: false }
       );
       return res.status(200).json(publicacion);
     } catch (error) {
@@ -104,7 +105,7 @@ class publicacionController {
       const publicacion = await PublicacionModel.findByIdAndUpdate(
         id,
         { $push: { comentarios: comentarioM } },
-        { new: true, useFindAndModify: false },
+        { new: true, useFindAndModify: false }
       );
       return res.status(200).json(publicacion);
     } catch (error) {
@@ -150,4 +151,4 @@ class publicacionController {
   }
 }
 
-export default publicacionController;
+module.exports = publicacionController;

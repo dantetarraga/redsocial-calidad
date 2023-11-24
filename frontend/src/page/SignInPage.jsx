@@ -7,15 +7,40 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
+import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SignIn from "../components/SignIn";
 import SocialLinks from "../components/SocialLinks";
 
 const SignInPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
   const handleLogin = () => {
-    navigate("/home");
+    axios
+      .post("http://localhost:3000/auth/login", {
+        correo: "jjmamaniTest@gmail.com",
+        contrasena: "22",
+      })
+      .then((res) => res.json)
+      .then((data) => {
+        console.log(data);
+        navigate("/home");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -89,7 +114,11 @@ const SignInPage = () => {
                     o usa tu cuenta
                   </span>
                 </Typography>
-                <SignIn login={handleLogin} />
+                <SignIn
+                  login={handleLogin}
+                  email={handleEmail}
+                  password={handlePassword}
+                />
                 <Typography variant="body2" sx={{ mt: 2 }}>
                   <Link href="#" target="_blank" underline="hover">
                     ¿Olvidaste tu contraseña?
