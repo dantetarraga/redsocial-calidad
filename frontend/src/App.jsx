@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
 import HomePage from "./page/HomePage";
 import SignInPage from "./page/SignInPage";
+import GroupPage from "./page/GroupPage";
 
 const route = createBrowserRouter([
   {
@@ -11,6 +12,10 @@ const route = createBrowserRouter([
   {
     path: "/home",
     element: <HomePage />,
+  },
+  {
+    path: "/group",
+    element: <GroupPage />,
   },
 ]);
 

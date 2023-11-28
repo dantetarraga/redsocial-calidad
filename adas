@@ -1,0 +1,95 @@
+[33mcommit 4a0540285a20da3cce0d5a6f681983b2a190a2ef[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: StefaniCoders <johanna.garatecar@gmail.com>
+Date:   Fri Nov 24 13:23:48 2023 -0500
+
+    add video photo
+
+[33mcommit 7af3fab49002114a21dee07c9f3edfec87fd3cd3[m
+Author: StefaniCoders <johanna.garatecar@gmail.com>
+Date:   Thu Nov 23 23:30:45 2023 -0500
+
+    chat
+
+[33mcommit efbe29acf6ee6bd2be073a34edbc0bd2956d8b51[m
+Author: Gary Vilca Tapia <gvilcat@ulasalle.edu.pe>
+Date:   Thu Nov 23 21:02:45 2023 -0500
+
+    Endpoints grupo
+
+[33mcommit 5e7ebf1078b4d10f7e01eab59ee4cf25ffdf5136[m
+Author: dantetarraga <dante.tarragau@gmail.com>
+Date:   Fri Nov 17 16:28:17 2023 -0500
+
+    frontend
+
+[33mcommit dc709a46b2bf884c1e850ec93e76edc1a587b6a6[m
+Author: StefaniCoders <johanna.garatecar@gmail.com>
+Date:   Fri Nov 17 13:33:55 2023 -0500
+
+    api actualizar publicacion y listar publicaciones
+
+[33mcommit 8ab46b25cddf0150245f31b92611992c45ad5606[m
+Author: StefaniCoders <johanna.garatecar@gmail.com>
+Date:   Fri Nov 17 13:28:00 2023 -0500
+
+    api actualizar publicacion y listar publicaciones
+
+[33mcommit 1a6e30a6b3e2cf63c911ea5378811d1986439b07[m
+Author: Stephanie Garate Cardenas <jgaratec@ulasalle.edu.pe>
+Date:   Fri Nov 17 01:59:46 2023 -0500
+
+    finalizado apis
+
+[33mcommit 04342e55e466243f67fd752548c5c9dda83c2998[m
+Author: StefaniCoders <johanna.garatecar@gmail.com>
+Date:   Fri Nov 17 01:32:58 2023 -0500
+
+    finalizar api reaccionar y comentar
+
+[33mcommit fdb02d4efbd5e46435e802d24e25ee003937cfeb[m
+Author: StefaniCoders <johanna.garatecar@gmail.com>
+Date:   Fri Nov 17 00:23:27 2023 -0500
+
+    api reaccionar y comentar publicaciones
+
+[33mcommit ba3abbf48be7dba8e221c681e0d9b95a794fd199[m
+Author: StefaniCoders <johanna.garatecar@gmail.com>
+Date:   Thu Nov 16 23:48:06 2023 -0500
+
+    api crear publicacion y eliminar publicacion
+
+[33mcommit a7f8447f3df271cc449b78cf7f56b186e22bfc9b[m
+Author: Stephanie Garate Cardenas <jgaratec@ulasalle.edu.pe>
+Date:   Thu Nov 16 17:17:21 2023 -0500
+
+    publicaciones
+
+[33mcommit 8275356120f9a3e987c86cd33d8ac514d6306bf4[m
+Author: Stephanie Garate Cardenas <jgaratec@ulasalle.edu.pe>
+Date:   Thu Nov 16 17:05:11 2023 -0500
+
+    actualizando la parte de publicaciones
+
+[33mcommit 68e96d8a576c7ee76980fd889a3bd18a8cc4f692[m
+Author: Stephanie Garate Cardenas <jgaratec@ulasalle.edu.pe>
+Date:   Thu Nov 16 06:07:39 2023 -0500
+
+    Creando publicacion Model
+
+[33mcommit f4101e84fb898d6c045df05fade95cf5bcd0ed64[m
+Author: Gary Vilca Tapia <gvilcat@ulasalle.edu.pe>
+Date:   Wed Nov 15 20:16:10 2023 -0500
+
+    Endpoints conversations (chat)
+
+[33mcommit ae6bb9df4b8f01601e0a129f9893053840ba972c[m
+Author: dantetarraga <dante.tarragau@gmail.com>
+Date:   Fri Nov 3 15:12:49 2023 -0500
+
+    jwt
+
+[33mcommit 1d209628878e56db5642051782e4ba96def55a00[m
+Author: dantetarraga <dante.tarragau@gmail.com>
+Date:   Fri Nov 3 14:50:11 2023 -0500
+
+    endpoints - jwt
