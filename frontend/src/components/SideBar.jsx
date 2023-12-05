@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import {
   AccountBox,
   Bookmarks,
@@ -5,7 +6,7 @@ import {
   Group,
   Groups,
   Home,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -15,17 +16,23 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-} from "@mui/material";
+} from '@mui/material';
 
 const SideBar = () => {
+  const navigate = useNavigate();
+
   const menuOptions = [
-    { text: "Usuario 1", icon: <Avatar /> },
-    { text: "Home", icon: <Home /> },
-    { text: "Messages", icon: <Forum /> },
-    { text: "Profile", icon: <AccountBox /> },
+    { text: 'Usuario 1', icon: <Avatar /> },
+    { text: 'Home', icon: <Home /> },
+    { text: 'Messages', icon: <Forum /> },
+    { text: 'Profile', icon: <AccountBox /> },
     { text: "Amigos", icon: <Group /> },
-    { text: "Grupos", icon: <Groups /> },
-    { text: "Guardado", icon: <Bookmarks /> },
+    {
+      text: 'Grupos',
+      icon: <Groups />,
+      onClick: () => navigate('/group'), // Redirigir a '/group' al hacer clic en Grupos
+    },
+    { text: 'Guardado', icon: <Bookmarks /> },
   ];
 
   const list = () => (
@@ -33,8 +40,9 @@ const SideBar = () => {
       {menuOptions.map((option) => (
         <ListItem key={option.text}>
           <ListItemButton
+            onClick={option.onClick} // Agregar la función onClick si está definida
             sx={{
-              "&:hover": {
+              '&:hover': {
                 backgroundColor: (theme) => theme.palette.drawer.hover,
               },
             }}
@@ -54,9 +62,9 @@ const SideBar = () => {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        "& .MuiDrawer-paper": {
+        '& .MuiDrawer-paper': {
           width: drawerWidth,
-          boxSizing: "border-box",
+          boxSizing: 'border-box',
         },
       }}
       variant="permanent"
@@ -65,7 +73,7 @@ const SideBar = () => {
       <Box
         sx={{
           backgroundColor: (theme) => theme.palette.drawer.main,
-          height: "100%",
+          height: '100%',
         }}
       >
         {list()}
