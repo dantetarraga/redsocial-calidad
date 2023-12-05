@@ -39,20 +39,24 @@ class publicacionController {
 
   static async createPublicacion(req, res) {
     try {
-      const { usuario, fecha, descripcion } = req.body;
-      const fileUrl = `/${req.file.destination}${req.file.filename}`;
-      console.log({ usuario, fecha, descripcion, fileUrl });
+      const { usuario, fecha, descripcion, tipoFile } = req.body;
+      let fileUrl;
+      if (req.file) {
+        fileUrl = `/${req.file.destination}${req.file.filename}`;
+      }
+
       const publicacion = new PublicacionModel({
         usuario,
         fecha,
         descripcion,
         fileUrl,
+        tipoFile,
       });
 
       const publicacionCreada = await publicacion.save();
       return res.status(200).json(publicacionCreada);
     } catch (error) {
-      return res.status(500).json({ error: "Error al crear publicacion" });
+      return res.status(500).json({ message: error.message, error });
     }
   }
 

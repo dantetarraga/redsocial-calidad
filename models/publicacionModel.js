@@ -10,7 +10,7 @@ const esquemaPublicacion = mongoose.Schema({
     required: true,
   },
   fecha: {
-    type: Date,
+    type: String,
     required: true,
   },
   descripcion: {
@@ -18,6 +18,9 @@ const esquemaPublicacion = mongoose.Schema({
     required: true,
   },
   fileUrl: {
+    type: String,
+  },
+  tipoFile: {
     type: String,
   },
   comentarios: [esquemaComentario],

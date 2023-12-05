@@ -23,6 +23,9 @@ import {
 } from "@mui/material";
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
+import axios from "axios";
+import React, { useState, useEffect, useRef } from "react";
+import Loader from "../components/Loader";
 
 const Search = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
@@ -76,9 +79,170 @@ const theme = createTheme({
 
 const HomePage = () => {
   const drawerWidth = 282;
+  const [posts, setPosts] = useState([]);
+  const [descriptionPostValue, setDescriptionPostValue] = useState("");
+  const [commentPostValue, setCommentPostValue] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [loaderIsVisible, setLoaderIsVisible] = useState(false);
+
+  const listPosts = async () => {
+    setLoaderIsVisible(true);
+    const response = await axios.get("http://localhost:3000/publicacion");
+    setPosts(response.data);
+    setLoaderIsVisible(false);
+  };
+
+  useEffect(() => {
+    listPosts();
+  }, []);
+
+  const handleCreatePostClick = async () => {
+    const today = new Date();
+    const formattedDate = formatDateToDDMMYYYY(today);
+    setLoaderIsVisible(true);
+
+    const formData = new FormData();
+    console.log("selectedVideo", selectedVideo);
+    if (selectedFile) {
+      formData.append("file", selectedFile);
+      formData.append("tipoFile", "imagen");
+    } else if (selectedVideo) {
+      formData.append("file", selectedVideo);
+      formData.append("tipoFile", "video");
+    }
+
+    formData.append("usuario", "Stefany");
+    formData.append("fecha", formattedDate);
+    formData.append("descripcion", descriptionPostValue);
+
+    const response = await axios.post(
+      "http://localhost:3000/publicacion/create",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
+    console.log(response);
+    listPosts();
+    setSelectedFile(null);
+    setSelectedVideo(null);
+    setLoaderIsVisible(false);
+  };
+
+  const handleChangeDescriptionPost = (event) => {
+    setDescriptionPostValue(event.target.value);
+  };
+
+  const handleChangeCommentPost = (event) => {
+    setCommentPostValue(event.target.value);
+  };
+
+  const formatDateToDDMMYYYY = (date) => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // ¡Recuerda que en JavaScript, los meses van de 0 a 11!
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+
+    // Agrega ceros iniciales si es necesario
+    const formattedDay = day < 10 ? `0${day}` : day;
+    const formattedMonth = month < 10 ? `0${month}` : month;
+    const formattedHours = hours < 10 ? `0${hours}` : hours;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+
+    // Formatea la fecha y hora como "dd/MM/yyyy HH:mm:ss"
+    const formattedDateTime = `${formattedDay}/${formattedMonth}/${year} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+
+    return formattedDateTime;
+  };
+
+  const inputFileRef = useRef(null);
+
+  const handleIconClick = () => {
+    inputFileRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    console.log("Archivo seleccionado:", file);
+  };
+
+  const inputVideoRef = useRef(null);
+
+  const handleIconClickVideo = () => {
+    console.log("handleIconClickVideo");
+    inputVideoRef.current.click();
+  };
+
+  const handleFileChangeVideo = (event) => {
+    const maxSizeMB = 6;
+    const file = event.target.files[0];
+    if (file) {
+      const fileSizeMB = file.size / (1024 * 1024);
+      if (fileSizeMB > maxSizeMB) {
+        alert(
+          `El video seleccionado es demasiado grande. El tamaño máximo permitido es de ${maxSizeMB} MB.`,
+        );
+        setSelectedFile(null);
+      } else {
+        setSelectedVideo(file);
+        console.log("Archivo seleccionado Video:", file);
+      }
+    }
+  };
+
+  const handleIconLikeClick = async (id) => {
+    const today = new Date();
+    const formattedDate = formatDateToDDMMYYYY(today);
+
+    const data = {
+      id,
+      reaccion: "r_me_gusta",
+      fecha: formattedDate,
+      usuario: "Stefany",
+    };
+    console.log("Data reaccionar ==>", data);
+    const response = await axios.post(
+      "http://localhost:3000/publicacion/reacted",
+      data,
+    );
+    console.log("response reaccionar", response);
+    listPosts();
+  };
+
+  const handleEnterKeyPress = (id) => async (event) => {
+    if (event.key === "Enter") {
+      setLoaderIsVisible(true);
+      const today = new Date();
+      const formattedDate = formatDateToDDMMYYYY(today);
+
+      const data = {
+        id,
+        comentario: commentPostValue,
+        fecha: formattedDate,
+        usuario: "Stefany",
+      };
+      console.log("data comentario", data);
+      const response = await axios.post(
+        "http://localhost:3000/publicacion/comment",
+        data,
+      );
+      listPosts();
+      setCommentPostValue("");
+      setLoaderIsVisible(false);
+    }
+  };
+
   return (
     <div>
       <ThemeProvider theme={theme}>
+        <Loader isVisible={loaderIsVisible} />
         <CssBaseline />
         <Box sx={{ display: "flex", flexGrow: 1 }}>
           <SideBar anchor="left" />
@@ -192,192 +356,190 @@ const HomePage = () => {
                   <Search>
                     <StyledInputBase
                       sx={{ width: "100%" }}
-                      placeholder="What's on your mind?"
-                      inputProps={{ "aria-label": "What's on your mind?" }}
+                      placeholder="Qué estás pensando ahora?"
+                      inputProps={{ "aria-label": "Qué estas pensando ahora?" }}
+                      value={descriptionPostValue}
+                      onChange={handleChangeDescriptionPost}
                     />
                   </Search>
                 </Box>
                 <Box sx={{ display: "flex", width: "100%" }}>
-                  <IconButton>
+                  <input
+                    type="file"
+                    ref={inputFileRef}
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
+                    accept="image/*"
+                  />
+                  <input
+                    type="file"
+                    accept="video/*"
+                    ref={inputVideoRef}
+                    style={{ display: "none" }}
+                    onChange={handleFileChangeVideo}
+                  />
+                  <IconButton onClick={handleIconClick}>
                     <AddPhotoAlternate />
                   </IconButton>
-                  <IconButton>
+                  <IconButton onClick={handleIconClickVideo}>
                     <VideoLibrary />
                   </IconButton>
-                  <IconButton>
-                    <GifBoxRounded />
-                  </IconButton>
                   <Box sx={{ flexGrow: 1 }} />
-                  <Button color="secondary" variant="contained">
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={handleCreatePostClick}
+                  >
                     Create a post
                   </Button>
                 </Box>
               </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  rowGap: 2,
-                  justifyContent: "space-between",
-                  backgroundColor: "post.main",
-                  height: "auto",
-                  borderRadius: "12px",
-                  marginTop: 3,
-                  p: 3,
-                }}
-              >
-                <Box sx={{ width: "100%", display: "flex", columnGap: 2 }}>
-                  <Avatar alt="Small Avatar" sizes="large" />
-                  <Box>
-                    <Typography sx={{ fontSize: 16 }} color="text.primary">
-                      Nombre Usuario
-                    </Typography>
-                    <Typography
-                      sx={{ fontSize: "12px" }}
-                      color="text.secondary"
-                    >
-                      Fecha
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ flexGrow: 1 }}>
-                  <Typography sx={{ fontSize: 14 }} color="text.pramary">
-                    In the fast-paced world of corporate life, its crucial to
-                    prioritize your mental peace. Take moments to breathe,
-                    reflect, and recharge. Seek solace in small rituals, like
-                    morning walks, deep breaths, or a quick meditation session
-                    during breaks. #mentalpeace #corporatelife
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <IconButton>
-                    <ThumbUpAltOutlined />
-                  </IconButton>
-                  <Typography
-                    component="span"
-                    color="text.pramary"
-                    sx={{ fontSize: 14 }}
-                  >
-                    2.1k
-                  </Typography>
-                  <IconButton>
-                    <ModeCommentOutlined />
-                  </IconButton>
-                  <Typography
-                    component="span"
-                    color="text.pramary"
-                    sx={{ fontSize: 14 }}
-                  >
-                    6 comments
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", width: "100%" }}>
-                  <Avatar
+
+              {posts.map((post) => {
+                return (
+                  <Box
                     sx={{
-                      width: 40,
-                      height: 40,
-                    }}
-                  />
-                  <Search>
-                    <StyledInputBase
-                      sx={{ width: "100%" }}
-                      placeholder="What's on your mind?"
-                      inputProps={{ "aria-label": "What's on your mind?" }}
-                    />
-                  </Search>
-                </Box>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  rowGap: 2,
-                  justifyContent: "space-between",
-                  backgroundColor: "post.main",
-                  height: "auto",
-                  borderRadius: "12px",
-                  marginTop: 3,
-                  p: 3,
-                }}
-              >
-                <Box sx={{ width: "100%", display: "flex", columnGap: 2 }}>
-                  <Avatar alt="Small Avatar" sizes="large" />
-                  <Box>
-                    <Typography sx={{ fontSize: 16 }} color="text.primary">
-                      Nombre Usuario
-                    </Typography>
-                    <Typography
-                      sx={{ fontSize: "12px" }}
-                      color="text.secondary"
-                    >
-                      Fecha
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ flexGrow: 1 }}>
-                  <Typography sx={{ fontSize: 14 }} color="text.pramary">
-                    In the fast-paced world of corporate life, its crucial to
-                    prioritize your mental peace. Take moments to breathe,
-                    reflect, and recharge. Seek solace in small rituals, like
-                    morning walks, deep breaths, or a quick meditation session
-                    during breaks. #mentalpeace #corporatelife
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    justifyContent: "center",
-                    backgroundColor: "history.main",
-                  }}
-                >
-                  <img
-                    src="data:image/jpeg;base64,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"
-                    alt=""
-                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      rowGap: 2,
+                      justifyContent: "space-between",
+                      backgroundColor: "post.main",
                       height: "auto",
-                      objectFit: "contain",
+                      borderRadius: "12px",
+                      marginTop: 3,
+                      p: 3,
                     }}
-                  />
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <IconButton>
-                    <ThumbUpAltOutlined />
-                  </IconButton>
-                  <Typography
-                    component="span"
-                    color="text.pramary"
-                    sx={{ fontSize: 14 }}
                   >
-                    2.1k
-                  </Typography>
-                  <IconButton>
-                    <ModeCommentOutlined />
-                  </IconButton>
-                  <Typography
-                    component="span"
-                    color="text.pramary"
-                    sx={{ fontSize: 14 }}
-                  >
-                    6 comments
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", width: "100%" }}>
-                  <Avatar
-                    sx={{
-                      width: 40,
-                      height: 40,
-                    }}
-                  />
-                  <Search>
-                    <StyledInputBase
-                      sx={{ width: "100%" }}
-                      placeholder="What's on your mind?"
-                      inputProps={{ "aria-label": "What's on your mind?" }}
-                    />
-                  </Search>
-                </Box>
-              </Box>
+                    <Box sx={{ width: "100%", display: "flex", columnGap: 2 }}>
+                      <Avatar alt="Small Avatar" sizes="large" />
+                      <Box>
+                        <Typography sx={{ fontSize: 16 }} color="text.primary">
+                          {post.usuario}
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: "12px" }}
+                          color="text.secondary"
+                        >
+                          {post.fecha}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box sx={{ flexGrow: 1 }}>
+                      <Typography sx={{ fontSize: 14 }} color="text.pramary">
+                        {post.descripcion}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        display: "flex",
+                        justifyContent: "center",
+                        backgroundColor: "history.main",
+                      }}
+                    >
+                      {post.fileUrl ? (
+                        post.tipoFile == "imagen" ? (
+                          <img
+                            src={`http://localhost:3000${post.fileUrl}`}
+                            alt=""
+                            style={{
+                              height: "360",
+                              objectFit: "contain",
+                            }}
+                          />
+                        ) : (
+                          <video width="360" height="360" controls>
+                            <source
+                              src={`http://localhost:3000${post.fileUrl}`}
+                              type="video/mp4"
+                            />
+                            Tu navegador no soporta el elemento de video.
+                          </video>
+                        )
+                      ) : null}
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <IconButton onClick={() => handleIconLikeClick(post._id)}>
+                        <ThumbUpAltOutlined />
+                      </IconButton>
+                      <Typography
+                        component="span"
+                        color="text.pramary"
+                        sx={{ fontSize: 14 }}
+                      >
+                        {post.reacciones.length}
+                      </Typography>
+                      <IconButton>
+                        <ModeCommentOutlined />
+                      </IconButton>
+                      <Typography
+                        component="span"
+                        color="text.pramary"
+                        sx={{ fontSize: 14 }}
+                      >
+                        {post.comentarios.length} comentarios
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", width: "100%" }}>
+                      <Avatar
+                        sx={{
+                          width: 40,
+                          height: 40,
+                        }}
+                      />
+                      <Search>
+                        <StyledInputBase
+                          sx={{ width: "100%" }}
+                          placeholder="Qué estás pensando?"
+                          inputProps={{ "aria-label": "Qué estás pensando?" }}
+                          value={commentPostValue}
+                          onChange={handleChangeCommentPost}
+                          onKeyDown={handleEnterKeyPress(post._id)}
+                        />
+                      </Search>
+                    </Box>
+
+                    {post.comentarios.map((comentario) => {
+                      return (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            width: "100%",
+                          }}
+                        >
+                          <Avatar
+                            sx={{
+                              width: 40,
+                              height: 40,
+                            }}
+                          />
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              marginLeft: "10px",
+                              width: "100%",
+                            }}
+                          >
+                            <Typography
+                              sx={{ fontSize: 12 }}
+                              color="text.pramary"
+                            >
+                              {comentario.usuario}
+                            </Typography>
+                            <Typography
+                              sx={{ fontSize: 14 }}
+                              color="text.pramary"
+                            >
+                              {comentario.comentario}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                );
+              })}
             </Box>
 
             <div>
@@ -387,25 +549,6 @@ const HomePage = () => {
                   <Typography variant="h6">Mi Barra de Navegación</Typography>
                 </Toolbar>
               </AppBar> */}
-
-              {/* Contenido principal con rejilla */}
-              <Grid container spacing={2}>
-                {/* Contenido principal */}
-                <Grid item xs={9}>
-                  <div style={{ padding: "16px" }}>
-                    <Typography variant="h4">Contenido principal</Typography>
-                    <p>Otro contenido principal...</p>
-                  </div>
-                </Grid>
-
-                {/* Aside en la parte derecha */}
-                <Grid item xs={3}>
-                  <Paper style={{ padding: "16px" }}>
-                    <Typography variant="h6">Aside</Typography>
-                    <p>Contenido del aside...</p>
-                  </Paper>
-                </Grid>
-              </Grid>
             </div>
           </Box>
         </Box>
